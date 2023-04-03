@@ -8,7 +8,7 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-deepsysid = {git = "https://github.com/AlexandraBaier/deepsysid"}
+deepsysid = {git = "https://github.com/AlexandraBaier/deepsysid", branch="hybrid_stable_model"}
 torch = "^1.13.0"
 numpy = "^1.23.5"
 matplotlib = "^3.6.2"

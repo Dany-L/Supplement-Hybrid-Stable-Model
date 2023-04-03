@@ -8,6 +8,7 @@ from deepsysid.pipeline.configuration import ExperimentGridSearchTemplate, Exper
 from deepsysid.pipeline.data_io import build_score_file_name, build_explanation_result_file_name
 from deepsysid.pipeline.evaluation import ReadableEvaluationScores
 from deepsysid.pipeline.gridsearch import ExperimentSessionReport
+from deepsysid.cli.download import TOY_DATASET_FOLDERNAMES_DICT, TOY_DATASET_ZIP_BASE_NAME
 
 
 def get_best_models(report_path: pathlib.Path) -> Set[str]:
@@ -109,26 +110,15 @@ def summarize_experiment(
 def main():
     main_path = pathlib.Path(__file__).parent.parent.absolute()
 
-    summarize_experiment(
-        report_path=main_path.joinpath('configuration').joinpath('progress-ship.json'),
-        configuration_path=main_path.joinpath('configuration').joinpath('ship.json'),
-        result_directory=main_path.joinpath('results').joinpath('ship-ind'),
-        horizons=[1, 450, 900]
-    )
-
-    summarize_experiment(
-        report_path=main_path.joinpath('configuration').joinpath('progress-ship.json'),
-        configuration_path=main_path.joinpath('configuration').joinpath('ship.json'),
-        result_directory=main_path.joinpath('results').joinpath('ship-ood'),
-        horizons=[1, 450, 900]
-    )
-
-    summarize_experiment(
-        report_path=main_path.joinpath('configuration').joinpath('progress-pelican.json'),
-        configuration_path=main_path.joinpath('configuration').joinpath('pelican.json'),
-        result_directory=main_path.joinpath('results').joinpath('pelican'),
-        horizons=[1, 50, 100]
-    )
+    for data_rel_dict in TOY_DATASET_FOLDERNAMES_DICT.values():
+        system_name = pathlib.Path(data_rel_dict).parent
+        system_root_folder = main_path.joinpath(TOY_DATASET_FOLDERNAMES_DICT, system_name)
+        summarize_experiment(
+            report_path=system_root_folder.joinpath('configuration', f'progress-{system_root_folder}.json'),
+            configuration_path=main_path.joinpath('configuration', f'{system_name}.json'),
+            result_directory=system_root_folder.joinpath('results'),
+            horizons=[10, 100, 400]
+        )
 
 
 if __name__ == '__main__':
