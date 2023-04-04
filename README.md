@@ -4,8 +4,8 @@ This repository is forked from https://github.com/AlexandraBaier/Supplement_Phys
 
 Clone this repository and install dependencies:
 ```shell
-git clone https://github.com/AlexandraBaier/Supplement_Physics_Residual-Bounded_LSTM.git
-cd Supplement_Physics_Residual-Bounded_LSTM
+git clone {repository name}
+cd {repository name}
 pip install .
 ```
 
