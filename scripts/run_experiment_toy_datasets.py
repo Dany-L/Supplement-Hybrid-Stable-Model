@@ -14,18 +14,14 @@ def run_system_experiment(path: pathlib.Path, system_name: str, device_idx:int)-
 
     run_full_gridsearch_session(
         report_path=report_path,
-        device_idx=device_idx,
         environment=environment
     )
 
 def main():
-    parser = argparse.ArgumentParser('Run experiments for cartpole dataset.')
-    parser.add_argument('device')
+    parser = argparse.ArgumentParser('Run experiments for toy dataset.')
     parser.add_argument('system_name')
     args = parser.parse_args()
 
-
-    device_idx = int(args.device)
     system_name = str(args.system_name)
 
     main_path = pathlib.Path(__file__).parent.parent.absolute().joinpath(TOY_DATASET_ZIP_BASE_NAME)
@@ -33,7 +29,6 @@ def main():
     run_system_experiment(
         path=main_path.joinpath(system_name),
         system_name=system_name,
-        device_idx=device_idx
     )
 
 if __name__ == '__main__':

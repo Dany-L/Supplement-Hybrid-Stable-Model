@@ -46,7 +46,6 @@ def get_configuration_path(
 
 def run_full_gridsearch_session(
     report_path: pathlib.Path,
-    device_idx: int,
     environment: Dict[str, str]
 ):
     if report_path.exists():
@@ -55,8 +54,6 @@ def run_full_gridsearch_session(
         return_code = subprocess.call([
             'deepsysid',
             'session',
-            '--enable-cuda',
-            f'--device-idx={device_idx}',
             f'--reportin={report_path}',
             report_path,
             action
@@ -67,8 +64,6 @@ def run_full_gridsearch_session(
         return_code = subprocess.call([
             'deepsysid',
             'session',
-            '--enable-cuda',
-            f'--device-idx={device_idx}',
             report_path,
             action
         ], env=environment)
@@ -80,8 +75,6 @@ def run_full_gridsearch_session(
     subprocess.call([
         'deepsysid',
         'session',
-        '--enable-cuda',
-        f'--device-idx={device_idx}',
         f'--reportin={report_path}',
         report_path,
         action
