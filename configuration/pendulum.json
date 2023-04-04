@@ -75,13 +75,13 @@
       },
       "flexible_parameters": {
         "nwu": [
-          4,
           8,
           16,
-          32,
-          64,
-          128,
-          192
+          128
+        ],
+        "enforce_constraints_method": [
+          "barrier",
+          "projection"
         ]
       }
     },

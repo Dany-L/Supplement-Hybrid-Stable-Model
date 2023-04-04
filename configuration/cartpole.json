@@ -84,9 +84,13 @@
                 8,
                 16,
                 128
+              ],
+              "enforce_constraints_method": [
+                "barrier",
+                "projection"
               ]
             }
-        },
+          },
       {
         "model_base_name": "LSTM+Init",
         "model_class": "deepsysid.models.recurrent.LSTMInitModel",
