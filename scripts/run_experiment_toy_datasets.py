@@ -6,7 +6,7 @@ from deepsysid.cli.download import TOY_DATASET_FOLDERNAMES_DICT, TOY_DATASET_ZIP
 from pbrl.utils import load_environment, run_full_gridsearch_session
 
 
-def run_system_experiment(path: pathlib.Path, system_name: str, device_idx:int)-> None:
+def run_system_experiment(path: pathlib.Path, system_name: str)-> None:
     report_path = path.joinpath('configuration').joinpath(f'progress-{system_name}.json')
     environment_path = path.joinpath(f'{system_name}.env')
 
