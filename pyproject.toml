@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "supplement-physics-bounded-residual-lstm"
+name = "supplement-hybrid-stable-rnn"
 version = "0.1.2"
 description = "Reproduction code for our paper 'Physics Residual-Bounded LSTM for Safe Vehicle State Prediction.'"
 authors = ["Alexandra Baier <alx.baier@gmail.com>"]

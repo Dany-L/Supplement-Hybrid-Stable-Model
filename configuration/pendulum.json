@@ -58,6 +58,7 @@
         "initial_decay_parameter": 1e-3,
         "decay_rate": 10,
         "epochs_with_const_decay": 100,
+        "epochs_without_projection": 50,
         "A_lin": [
           [0.0, 1.0], 
           [-19.62, -0.39999999999999997]
@@ -71,7 +72,7 @@
         "alpha": -1.0,
         "beta": 1.0,
         "gamma": 5.0,
-        "clip_gradient_norm": 100.0
+        "clip_gradient_norm": 50.0
       },
       "flexible_parameters": {
         "nwu": [
