@@ -5,6 +5,9 @@
     "time_delta": 0.05,
     "window_size": 60,
     "horizon_size": 400,
+    "session": {
+      "total_runs_for_best_models": 3
+    },
     "additional_tests": {},
     "control_names": [
       "u_1"

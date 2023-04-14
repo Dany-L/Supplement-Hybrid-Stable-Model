@@ -1,5 +1,6 @@
 import pathlib
 from typing import Set, List
+import argparse
 
 import h5py
 import numpy as np
@@ -110,16 +111,19 @@ def summarize_experiment(
 def main():
     main_path = pathlib.Path(__file__).parent.parent.absolute()
 
-    for data_rel_dict in TOY_DATASET_FOLDERNAMES_DICT.values():
-        system_name = pathlib.Path(data_rel_dict).parent
-        system_root_folder = main_path.joinpath(TOY_DATASET_FOLDERNAMES_DICT, system_name)
-        summarize_experiment(
-            report_path=system_root_folder.joinpath('configuration', f'progress-{system_root_folder}.json'),
-            configuration_path=main_path.joinpath('configuration', f'{system_name}.json'),
-            result_directory=system_root_folder.joinpath('results'),
-            horizons=[10, 100, 400]
-        )
+    parser = argparse.ArgumentParser('Run experiments for cartpole dataset.')
+    parser.add_argument('system_name')
+    args = parser.parse_args()
 
+    system_name = str(args.system_name)
+    system_root_folder = main_path.joinpath(TOY_DATASET_ZIP_BASE_NAME, system_name)
+
+    summarize_experiment(
+        report_path=system_root_folder.joinpath('configuration', f'progress-{system_name}.json'),
+        configuration_path=main_path.joinpath('configuration', f'{system_name}.json'),
+        result_directory=system_root_folder.joinpath('results'),
+        horizons=[10, 100, 400]
+    )
 
 if __name__ == '__main__':
     main()
