@@ -2,9 +2,9 @@
     "settings": {
       "train_fraction": 0.6,
       "validation_fraction": 0.1,
-      "time_delta": 0.02,
+      "time_delta": 0.01,
       "window_size": 60,
-      "horizon_size": 400,
+      "horizon_size": 2000,
       "session": {
         "total_runs_for_best_models": 3
       },
@@ -30,71 +30,63 @@
         "rmse": {
           "metric_class":  "deepsysid.pipeline.metrics.RootMeanSquaredErrorMetric",
           "parameters": {}
-        },
-        "mse": {
-          "metric_class":  "deepsysid.pipeline.metrics.MeanSquaredErrorMetric",
-          "parameters": {}
-        },
-        "mae": {
-          "metric_class":  "deepsysid.pipeline.metrics.MeanAbsoluteErrorMetric",
-          "parameters": {}
-        },
-        "d1": {
-          "metric_class":  "deepsysid.pipeline.metrics.IndexOfAgreementMetric",
-          "parameters": {
-            "j": 1
-          }
         }
       }
     },
     "models": [
-        {
-            "model_base_name": "HybridCRnn",
-            "model_class": "deepsysid.models.recurrent.HybridConstrainedRnn",
-            "static_parameters": {
-              "dropout": 0.25,
-              "sequence_length": 50,
-              "batch_size": 64,
-              "epochs_initializer": 400,
-              "epochs_predictor": 2000,
-              "learning_rate": 1e-3,
-              "loss": "mse",
-              "num_recurrent_layers_init": 2,
-              "initial_decay_parameter": 1e-3,
-              "decay_rate": 10,
-              "epochs_with_const_decay": 100,
-              "epochs_without_projection": 50,
-              "A_lin": [
-                [0.0, 1.0, 0.0, 0.0], 
-                [0.0, 0.0, -0.7178048780487806, -0.014634146341463415], 
-                [0.0, 0.0, 0.0, 1.0], 
-                [0.0, 0.0, -15.791707317073172, -0.32195121951219513]
-              ], 
-              "B_lin": [
-                [0.0], 
-                [0.975609756097561], 
-                [0.0], 
-                [1.4634146341463414]
-              ], 
-              "C_lin": [[0.0, 0.0, 1.0, 0.0]],
-              "D_lin": [[0.0]],
-              "alpha": -1.0,
-              "beta": 1.0,
-              "gamma": 5.0,
-              "clip_gradient_norm": 50.0
-            },
-            "flexible_parameters": {
-              "nwu": [
-                8,
-                16,
-                128
-              ],
-              "enforce_constraints_method": [
-                "barrier",
-                "projection"
-              ]
-            }
-          },
+      {
+        "model_base_name": "HybridCRnn",
+        "model_class": "deepsysid.models.recurrent.HybridConstrainedRnn",
+        "static_parameters": {
+          "sequence_length": [10, 20, 30, 40, 50, 60],
+          "batch_size": 256,
+          "epochs_predictor": 200,
+          "learning_rate": 0.0025,
+          "loss": "mse",
+          "initial_decay_parameter": 1e-3,
+          "decay_rate": 10,
+          "epochs_with_const_decay": 100,
+          "epochs_without_projection": 100,
+          "mlflow_tracking_uri": "http://mlflowui.informatik.uni-stuttgart.de/",
+          "alpha": -1.0,
+          "beta": 1.0,
+          "clip_gradient_norm": 100.0,
+          "A_lin": [
+            [1.0, 0.01, 0.0, 0.0], 
+            [0.0, 1.0, -0.007178008368886014, -0.0001463412506527433], 
+            [0.0, 0.0, 1.0, 0.01], 
+            [0.0, 0.0, -0.15791678496042325, 0.9967804884024217]
+          ], 
+          "B_lin": [
+            [0.0], 
+            [0.009756095750237115], 
+            [0.0], 
+            [0.01463412506527433]
+          ], 
+          "C_lin": [[0.0, 0.0, 1.0, 0.0]],
+          "D_lin": [[0.0]]
+        },
+        "flexible_parameters": {
+          "nwu": [
+            8,
+            16,
+            64
+          ],
+          "enforce_constraints_method": [
+            "barrier",
+            null
+          ],
+          "gamma": [
+            1.0,
+            5.0,
+            60.0
+          ],
+          "extend_state":[
+            true,
+            false
+          ]
+        }
+      },
       {
         "model_base_name": "LSTM+Init",
         "model_class": "deepsysid.models.recurrent.LSTMInitModel",
@@ -104,36 +96,8 @@
           "batch_size": 256,
           "learning_rate": 0.0025,
           "epochs_initializer": 400,
-          "epochs_predictor": 2000,
+          "epochs_predictor": 800,
           "loss": "mse"
-        },
-        "flexible_parameters": {
-          "recurrent_dim": [
-            64,
-            128,
-            192,
-            256
-          ],
-          "num_recurrent_layers": [
-            2,
-            3,
-            4
-          ]
-        }
-      },
-      {
-        "model_base_name": "RnnInit",
-        "model_class": "deepsysid.models.recurrent.RnnInit",
-        "static_parameters": {
-          "dropout": 0.25,
-          "sequence_length": 50,
-          "batch_size": 128,
-          "epochs_initializer": 400,
-          "epochs_predictor": 2000,
-          "learning_rate": 0.0025,
-          "bias": true,
-          "loss": "mse",
-          "clip_gradient_norm": 10
         },
         "flexible_parameters": {
           "recurrent_dim": [
@@ -145,6 +109,43 @@
             2,
             3,
             4
+          ]
+        }
+      },
+      {
+        "model_base_name": "ConstrainedRnn",
+        "model_class": "deepsysid.models.recurrent.ConstrainedRnn",
+        "static_parameters": {
+          "num_recurrent_layers_init": 2,
+          "dropout": 0.25,
+          "loss": "mse",
+          "beta": 1.0,
+          "sequence_length": 50,
+          "batch_size": 256,
+          "epochs_initializer": 400,
+          "epochs_predictor": 800,
+          "initial_decay_parameter": 1e-3,
+          "decay_rate": 10,
+          "epochs_with_const_decay": 100,
+          "learning_rate": 0.0025,
+          "nonlinearity": "torch.nn.Tanh()",
+          "bias": false
+        },
+        "flexible_parameters": {
+          "gamma":[
+            1.0,
+            5.0,
+            60.0
+          ],
+          "nx":[
+            16,
+            32,
+            64
+          ],
+          "recurrent_dim": [
+            16,
+            32,
+            64
           ]
         }
       }

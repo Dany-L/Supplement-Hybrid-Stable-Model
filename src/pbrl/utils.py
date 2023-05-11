@@ -1,7 +1,10 @@
 import os
 import pathlib
 import subprocess
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Literal
+
+import matplotlib.pyplot as plt
+import tikzplotlib
 
 from deepsysid.pipeline.gridsearch import ExperimentSessionReport
 
@@ -98,3 +101,36 @@ def retrieve_tested_models(report_path: pathlib.Path) -> Set[str]:
         )
 
     return report.tested_models
+
+
+def build_plot_file_name(
+    type: Literal['input', 'state', 'output'],
+    sample_number: int,
+    extension: Literal['pdf', 'tex', 'png']
+) -> str:
+    return f'{type}-sample_{sample_number}.{extension}'
+
+
+def save_pyplot(
+    type: str,
+    directory: pathlib.Path,
+    sample_number: int
+) -> None:
+    plt.savefig(
+        directory.joinpath(build_plot_file_name(
+            type,
+            sample_number,
+            'png'
+        ))
+    )
+    try:
+        tikzplotlib.save(
+            directory.joinpath(build_plot_file_name(
+                type,
+                sample_number,
+                'tex'
+            ))
+        )
+    except:
+        print('Could not create .tex plot')
+
